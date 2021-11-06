@@ -1,20 +1,21 @@
 import os
 import requests
 from bs4 import BeautifulSoup
+from tika import parser
 
-
-class DownloadFiltering():
+class ReadOnlSource():
     def __init__(self):
         pass
 
-    def download_pdf_from_url(self, url, output_dir=''):
+    @staticmethod
+    def download_pdf_from_url(url, output_dir=''):
         if url.find('?') > 0:
             url = url[:url.find('?')]
 
         response = requests.get(url)
 
         if response.status_code == 200:
-            file_path = os.path.join('', os.path.basename(url))
+            file_path = os.path.join(output_dir, os.path.basename(url))
             print('Downloading ', file_path, '...')
             with open(file_path, 'wb') as f:
                 f.write(response.content)
@@ -24,15 +25,17 @@ class DownloadFiltering():
         # print('Cant download from ', url)
         return False
 
-    def read_pdf_from_url(self, url):
-        path = self.download_pdf_from_url(url)
+    @classmethod
+    def read_pdf_from_url(cls, url):
+        path = cls.download_pdf_from_url(url)
 
         if path:
             raw = parser.from_file('Philani_Magubane_2019.pdf')
             return raw["content"]
         # print('Cant read ', url)
 
-    def read_text_from_url(self, url):
+    @staticmethod
+    def read_text_from_url(url):
         url = 'https://www.geeksforgeeks.org/python-urllib-module/'
         response = requests.get(url)
 
@@ -64,6 +67,7 @@ class DownloadFiltering():
         # print('Cant read ', url)
         return False
 
-    def is_pdf_url(self, url):
+    @staticmethod
+    def is_pdf_url(url):
         return url.endswith('.pdf')
         
