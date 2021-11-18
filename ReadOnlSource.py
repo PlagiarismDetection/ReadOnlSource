@@ -36,7 +36,6 @@ class ReadOnlSource():
 
     @staticmethod
     def read_text_from_url(url):
-        url = 'https://www.geeksforgeeks.org/python-urllib-module/'
         response = requests.get(url)
 
         if response.status_code == 200:
